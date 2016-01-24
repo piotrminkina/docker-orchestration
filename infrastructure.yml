@@ -1,0 +1,52 @@
+---
+lbservers:
+  parameters:
+    cpus: 2
+    memory: 512
+  nodes:
+    - name: lb1
+      ip: 10.0.0.10
+      netmask: 255.255.0.0
+
+    - name: lb2
+      ip: 10.0.0.11
+      netmask: 255.255.0.0
+
+orchestrators:
+  parameters:
+    cpus: 2
+    memory: 512
+  nodes:
+    - name: rancher
+      ip: 10.0.1.10
+      netmask: 255.255.0.0
+
+webservers:
+  parameters:
+    cpus: 2
+    memory: 512
+  nodes:
+    - name: web1
+      ip: 10.0.2.10
+      netmask: 255.255.0.0
+
+    - name: web2
+      ip: 10.0.2.11
+      netmask: 255.255.0.0
+
+    - name: web3
+      ip: 10.0.2.12
+      netmask: 255.255.0.0
+
+dbservers:
+  parameters:
+    cpus: 2
+    memory: 512
+  nodes:
+    - name: db1
+      ip: 10.0.3.10
+      netmask: 255.255.0.0
+
+    - name: db2
+      ip: 10.0.3.11
+      netmask: 255.255.0.0
