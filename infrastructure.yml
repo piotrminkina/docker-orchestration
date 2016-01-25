@@ -1,52 +1,45 @@
 ---
-lbservers:
-  parameters:
-    cpus: 2
-    memory: 512
-  nodes:
-    - name: lb1
-      ip: 10.0.0.10
-      netmask: 255.255.0.0
+config:
+  netmask: 255.255.255.0
 
-    - name: lb2
-      ip: 10.0.0.11
-      netmask: 255.255.0.0
+groups:
+  managers:
+    resources:
+      cpus: 2
+      memory: 512
+    hosts:
+      rancher:
+        primary: yes
+        ip: 10.0.0.10
 
-orchestrators:
-  parameters:
-    cpus: 2
-    memory: 512
-  nodes:
-    - name: rancher
-      ip: 10.0.1.10
-      netmask: 255.255.0.0
+  lbservers:
+    resources:
+      cpus: 2
+      memory: 512
+    hosts:
+      lb1:
+        ip: 10.0.0.20
+      lb2:
+        ip: 10.0.0.21
 
-webservers:
-  parameters:
-    cpus: 2
-    memory: 512
-  nodes:
-    - name: web1
-      ip: 10.0.2.10
-      netmask: 255.255.0.0
+  webservers:
+    resources:
+      cpus: 2
+      memory: 512
+    hosts:
+      web1:
+        ip: 10.0.0.30
+      web2:
+        ip: 10.0.0.31
+      web3:
+        ip: 10.0.0.32
 
-    - name: web2
-      ip: 10.0.2.11
-      netmask: 255.255.0.0
-
-    - name: web3
-      ip: 10.0.2.12
-      netmask: 255.255.0.0
-
-dbservers:
-  parameters:
-    cpus: 2
-    memory: 512
-  nodes:
-    - name: db1
-      ip: 10.0.3.10
-      netmask: 255.255.0.0
-
-    - name: db2
-      ip: 10.0.3.11
-      netmask: 255.255.0.0
+  dbservers:
+    resources:
+      cpus: 2
+      memory: 512
+    hosts:
+      db1:
+        ip: 10.0.0.40
+      db2:
+        ip: 10.0.0.41
