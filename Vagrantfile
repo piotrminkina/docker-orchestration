@@ -1,7 +1,8 @@
 require 'yaml'
 
-infrastructure = YAML.load_file('infrastructure.yml')
 
+infrastructure = YAML.load_file('infrastructure.yml')
+ansible_groups = {}
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'williamyeh/ubuntu-trusty64-docker'
@@ -13,18 +14,22 @@ Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
 
   infrastructure['groups'].each do |group_name, group_config|
-    resources = group_config['resources']
+    machine_resources = group_config['resources']
+    ansible_groups[group_name] = []
 
     group_config['hosts'].each do |host_name, host_config|
+      ansible_groups[group_name] << host_name
+
       config.vm.define host_name, primary: !!host_config['primary'] do |host|
+        host.vm.hostname = "#{host_name}"
         host.vm.network 'private_network',
           ip: host_config['ip'],
           netmask: infrastructure['config']['netmask']
 
         host.vm.provider 'virtualbox' do |vbox|
-          vbox.name = "#{host_name}.dolocal"
-          vbox.cpus = resources['cpus']
-          vbox.memory = resources['memory']
+          vbox.name = "#{host_name}#docker-orchestration"
+          vbox.cpus = machine_resources['cpus']
+          vbox.memory = machine_resources['memory']
           vbox.customize ['modifyvm', :id, '--nictype1', 'virtio']
           vbox.customize ['modifyvm', :id, '--nictype2', 'virtio']
           vbox.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
@@ -37,7 +42,7 @@ Vagrant.configure('2') do |config|
     hosts.vm.provision 'ansible' do |ansible|
       ansible.limit = 'all'
       ansible.playbook = 'provision/site.yml'
-      ansible.inventory_path = 'provision/inventories/vagrant'
+      ansible.groups = ansible_groups
     end
   end
 end
